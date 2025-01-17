@@ -45,6 +45,8 @@ int i = 0;
 double moyenne = 0;
 
 void loop() {
+    long begintimestamp = micros();
+
   
   a = digitalRead(Ha);
   b = digitalRead(Hb);
@@ -87,5 +89,5 @@ void loop() {
       }
       
       timestamp = begintimestamp;
-      
-}
+
+}}
