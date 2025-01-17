@@ -4,7 +4,7 @@
 #define Hb 9
 #define Hc 8
 
-#define TLin_U 5
+#define tLin_U 5
 #define TLin_V 6
 #define TLin_W 7
 
@@ -31,7 +31,7 @@ void setup()
     pinMode(Hc, INPUT);
     pinMode(BUCK, OUTPUT);
 
-    pinMode(TLin_U, OUTPUT);
+    pinMode(tLin_U, OUTPUT);
     pinMode(TLin_V, OUTPUT);
     pinMode(TLin_W, OUTPUT);
 
@@ -70,7 +70,7 @@ void loop()
     kh_W = not(a) and c;
 
     digitalWrite(THin_U, kh_U);
-    digitalWrite(TLin_U, kl_U);
+    digitalWrite(tLin_U, kl_U);
 
     digitalWrite(THin_V, kh_V);
     digitalWrite(TLin_V, kl_V);
