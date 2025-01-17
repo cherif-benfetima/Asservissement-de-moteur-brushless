@@ -13,6 +13,8 @@
 #define THin_V 3
 #define THin_W 4
 
+#define DCDC 11
+
 bool a, b,c;
 bool kl_U, kh_U, kl_V, kh_V, kl_W, kh_W;
 
@@ -37,6 +39,9 @@ void setup() {
 
   timestamp = micros();
 
+  digitalWrite(DCDC,128);
+
+
 }
 
 
@@ -60,17 +65,6 @@ void loop() {
 
   kl_W = not(c) and a;
   kh_W = not(a) and c;
-
-  digitalWrite(THin_U,kh_U);
-  digitalWrite(TLin_U,kl_U);
-  
-  digitalWrite(THin_V,kh_V);
-  digitalWrite(TLin_V,kl_V);
-  
-  digitalWrite(THin_W,kh_W);
-  digitalWrite(TLin_W,kl_W);
-  
-
   
   if(lasta!=a || lastb!=b || lastc!=c){
       lasta = a;
