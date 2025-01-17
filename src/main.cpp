@@ -1,5 +1,6 @@
 #include <Arduino.h>
 
+
 #define Ha 10
 #define Hb 9
 #define Hc 8
@@ -14,9 +15,11 @@
 #define BUCK 12
 
 bool a, b, c;
+
 bool kl_U, kh_U, kl_V, kh_V, kl_W, kh_W;
 
 long timestamp;
+
 
 int alpha = 100;
 
@@ -40,6 +43,11 @@ void setup()
 
     timestamp = micros();
 }
+
+
+
+
+
 
 bool lasta, lastb, lastc;
 int i = 0;
