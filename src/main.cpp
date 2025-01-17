@@ -1,5 +1,6 @@
 #include <Arduino.h>
 
+
 #define Ha 10
 #define Hb 9
 #define Hc 8
@@ -14,6 +15,9 @@
 
 bool a, b,c;
 bool kl_U, kh_U, kl_V, kh_V, kl_W, kh_W;
+
+long timestamp;
+
 
 void setup() {
   // put your setup code here, to run once:
@@ -30,7 +34,15 @@ void setup() {
   pinMode(THin_U,OUTPUT);
   pinMode(THin_V,OUTPUT);
   pinMode(THin_W,OUTPUT);
+
+  timestamp = micros();
+
 }
+
+
+bool lasta, lastb, lastc;
+int i = 0;
+double moyenne = 0;
 
 void loop() {
   
@@ -56,4 +68,24 @@ void loop() {
   digitalWrite(THin_W,kh_W);
   digitalWrite(TLin_W,kl_W);
   
+
+  
+  if(lasta!=a || lastb!=b || lastc!=c){
+      lasta = a;
+      lastb = b;
+      lastc = c;
+
+      moyenne = (moyenne * 99 + 2500000/(begintimestamp - timestamp))/100.;  // (1000000 / delai) / 24 * 60
+                                                                             // (1s en us / delai en us) / 24 poles * 60 (conversion rpm)
+      if(i++ >= 50){
+        Serial.print(0);  // échelle de dessin (0 rpm min)
+        Serial.print(" ");
+        Serial.print(moyenne);
+        Serial.print(" ");
+        Serial.println(10000); // échelle de dessin (10000 rpm max)
+        i=0;
+      }
+      
+      timestamp = begintimestamp;
+      
 }
