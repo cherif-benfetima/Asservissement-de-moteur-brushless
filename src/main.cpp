@@ -50,7 +50,11 @@ void setup()
 
 bool lasta, lastb, lastc;
 int i = 0;
-double moyenne = 0;
+float consigne = 1500.f;//tr/min
+float vitesse_actuelle = 0.f;//tr/min
+float Kp = 0.1f, Ki = 0.1f, Kd = 0.1f;
+float erreur = 0.f, erreur_precedente = 0.f, somme_erreur = 0.f, delta_erreur = 0.f;
+unsigned long dt = 0, dt_prec = 0;
 
 void loop()
 {
@@ -84,13 +88,13 @@ void loop()
         lastb = b;
         lastc = c;
 
-        moyenne = (moyenne * 99 + 2500000 / (begintimestamp - timestamp)) / 100.; // (1000000 / delai) / 24 * 60
+        vitesse_actuelle = (vitesse_actuelle * 99 + 2500000 / (begintimestamp - timestamp)) / 100.; // (1000000 / delai) / 24 * 60
                                                                                   // (1s en us / delai en us) / 24 poles * 60 (conversion rpm)
         if (i++ >= 50)
         {
             Serial.print(0); // échelle de dessin (0 rpm min)
             Serial.print(" ");
-            Serial.print(moyenne);
+            Serial.print(vitesse_actuelle);
             Serial.print(" ");
             Serial.println(10000); // échelle de dessin (10000 rpm max)
             i = 0;
@@ -99,5 +103,20 @@ void loop()
         timestamp = begintimestamp;
     }
 
+
+    dt = micros();
+
+    erreur = consigne - vitesse_actuelle;
+    somme_erreur += (erreur * (dt - dt_prec)) / 1000000.0f; // Integrate over time
+    delta_erreur = (erreur - erreur_precedente) / ((dt - dt_prec) / 1000000.0f); // Differentiate over time
+
+    alpha = Kp * (consigne - vitesse_actuelle) + Ki * somme_erreur + Kd * delta_erreur;
+
+    if(alpha < 0) {alpha = 0;}
+    if(alpha > 255) {alpha = 255;}
     analogWrite(BUCK, alpha);
+
+    erreur_precedente = erreur;
+
+    dt_prec = dt;
 }
